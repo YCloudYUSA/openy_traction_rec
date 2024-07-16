@@ -21,3 +21,13 @@ function openy_traction_rec_import_requirements($phase) {
   }
   return $requirements;
 }
+
+/**
+ * Update sessions import with Course Session Description.
+ */
+function openy_traction_rec_import_update_10001() {
+  $config_dir = \Drupal::service('extension.list.module')->getPath('openy_traction_rec_import') . '/config/install';
+  $config_importer = \Drupal::service('openy_upgrade_tool.importer');
+  $config_importer->setDirectory($config_dir);
+  $config_importer->importConfigs(['migrate_plus.migration.tr_sessions_import']);
+}

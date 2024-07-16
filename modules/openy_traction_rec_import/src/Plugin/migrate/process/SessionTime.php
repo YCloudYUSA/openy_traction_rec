@@ -68,6 +68,7 @@ class SessionTime extends ProcessPluginBase implements ContainerFactoryPluginInt
 
   /**
    * {@inheritdoc}
+   * @throws MigrateSkipRowException
    */
   public function transform(
     $value,
@@ -77,8 +78,8 @@ class SessionTime extends ProcessPluginBase implements ContainerFactoryPluginInt
   ) {
     $value = $row->getSource();
 
-    if (empty($value['start_date']) || empty($value['days'])) {
-      throw new MigrateSkipRowException('Datetime or day cannot be empty for session');
+    if (empty($value['start_date'])) {
+      throw new MigrateSkipRowException('Datetime cannot be empty for session.');
     }
 
     // Default time.

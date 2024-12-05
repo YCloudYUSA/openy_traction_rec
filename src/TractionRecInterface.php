@@ -51,6 +51,14 @@ interface TractionRecInterface {
   public function loadMemberships(string $location = NULL): array;
 
   /**
+   * Loads the Total available for Course Options.
+   *
+   * @return array
+   *   The list of total available.
+   */
+  public function loadTotalAvailable(): array;
+
+  /**
    * Loads results for the next page.
    *
    * @param string $nextUrl

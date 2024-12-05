@@ -8,6 +8,7 @@ use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\Core\File\FileSystemInterface;
 use Drupal\Core\StringTranslation\StringTranslationTrait;
 use Drupal\Core\Url;
+use Drupal\node\NodeInterface;
 use Drupal\openy_traction_rec_import\Cleaner;
 use Drupal\openy_traction_rec_import\Importer;
 use Drupal\openy_traction_rec_import\TractionRecFetcher;
@@ -114,7 +115,7 @@ class OpenyTractionRecImportCommands extends DrushCommands {
         "openy_traction_rec_import" module, then enable the syncer at @settings.',
         [
           '@settings' =>
-          Url::fromRoute(
+            Url::fromRoute(
               'openy_traction_rec_import.settings',
               [],
               ['absolute' => TRUE])->toString(),
@@ -234,6 +235,51 @@ class OpenyTractionRecImportCommands extends DrushCommands {
     else {
       $this->logger()->notice("Traction Rec data fetched to " . $fetch);
     }
+  }
+
+  /**
+   * Run Traction Rec Total Available sync.
+   *
+   * @command openy-tr:quick-available-sync
+   * @aliases tr:quick-available-sync
+   */
+  public function updateTotalAvailable() {
+    if (!$this->tractionRecFetcher->isEnabled()) {
+      $this->logger()->notice($this->t(
+        'The Traction Rec fetcher is not enabled! Enable the fetcher at @settings',
+        [
+          '@settings' =>
+            Url::fromRoute(
+              'openy_traction_rec_import.settings',
+              [],
+              ['absolute' => TRUE])->toString(),
+        ]));
+      return FALSE;
+    }
+
+    $count = 0;
+    $this->logger()->notice("Fetching data from Traction Rec.");
+    $totalAvailableList = $this->tractionRecFetcher->fetchTotalAvailable();
+
+    $migration_map = \Drupal::database()->select('migrate_map_tr_sessions_import', 'm')
+      ->fields('m', ['sourceid1', 'destid1'])
+      ->execute()
+      ->fetchAllKeyed();
+
+    foreach ($totalAvailableList as $sessionId => $totalAvailableItem) {
+      if (!empty($migration_map[$sessionId])) {
+        $node = $this->entityTypeManager->getStorage('node')->load($migration_map[$sessionId]);
+        if ($node instanceof NodeInterface) {
+          $totalCapacityAvailable = $totalAvailableItem['Unlimited_Capacity'] ? 100 : max((int) $totalAvailableItem['Total_Capacity_Available'], 0);
+          $node->set('field_availability', $totalCapacityAvailable);
+          $node->set('waitlist_unlimited_capacity', $totalAvailableItem['Unlimited_Waitlist_Capacity']);
+          $node->set('waitlist_capacity', $totalAvailableItem['Waitlist_Total']);
+          $node->save();
+          $count++;
+        }
+      }
+    }
+    $this->logger()->notice($this->t('Total available data were synced for @count sessions', ['@count' => $count]));
   }
 
 }

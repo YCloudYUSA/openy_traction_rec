@@ -228,6 +228,23 @@ class TractionRecFetcher {
   }
 
   /**
+   * Fetches total available.
+   */
+  public function fetchTotalAvailable() {
+    $result_list = [];
+    $result = $this->tractionRec->loadTotalAvailable();
+
+    if (empty($result['records'])) {
+      return [];
+    }
+    foreach ($result['records'] as $record) {
+      $result_list[$record['Course_Option']['Id']] = $record['Course_Option'];
+    }
+
+    return $result_list;
+  }
+
+  /**
    * Provides the JSON directory path.
    *
    * @return string

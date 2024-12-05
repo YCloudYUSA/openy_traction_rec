@@ -18,6 +18,6 @@ services:
   openy_traction_rec.user_authorizer:
     class: Drupal\openy_traction_rec\TractionRecUserAuthorizer
     arguments: ['@entity_type.manager', '@module_handler', '@password_generator']
-  openy_traction_rec.traction_rec_user_membership:
-    class: Drupal\openy_bussing\TractionRecUserMembership
-    arguments: ['@openy_traction_rec.tr_client', '@logger.channel.traction_rec']
+  openy_traction_rec.user_membership:
+    class: Drupal\openy_traction_rec\TractionRecUserMembership
+    arguments: ['@openy_traction_rec.tr_client', '@event_dispatcher', '@logger.channel.traction_rec']

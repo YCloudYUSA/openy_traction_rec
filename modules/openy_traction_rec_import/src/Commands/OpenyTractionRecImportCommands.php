@@ -240,7 +240,7 @@ class OpenyTractionRecImportCommands extends DrushCommands {
   /**
    * Run Traction Rec Total Available sync.
    *
-   * @command openy-tr:quick-available-sync
+   * @command openy-tr:quick-availability-sync
    * @aliases tr:qas
    */
   public function updateTotalAvailable() {

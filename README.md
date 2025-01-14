@@ -59,49 +59,49 @@ See [modules/openy_traction_rec_import/README.md](modules/openy_traction_rec_imp
     - In the "My Connected App" screen that appears once you save (or via **Setup** > **App Manager**), click **Manage Consumer Details**.
     - Save the **Consumer Key** and **Consumer Secret** for the next step.
 4. Create a **Profile** OR **Permission Set** to assign permissions to your app. We recommend using a **Permission Set** as those are the option recommended by Salesforce.
-    1. Your Traction Rec support team should be able to deploy the `Traction Rec Activity Finder Permission Set` from their `dev1` instance. If this Permission Set is deployed, proceed straight to the **User** creation step.
-
-       To create a **Permission Set** from scratch:
-       - **Setup** > **Users** > **Permission Sets** > **New**
-       - Fill in the **Label** as you wish, and leave **License** as `--None--`
-       - In the new **Permission Set**, open **Object Settings**.
-       - In the very long list of **Object Settings**, do the following for each of the 10 [Objects listed below](#salesforce-permissions):
-           - Find the object and click to open it. In the configuration screen for each Object:
-               - Under **Object Permissions**, mark **Read** as **Enabled**.
-               - Under **Field Permissions**, mark **Read Access** on the header field to provide access to all fields.
-           - Save the **Object Settings** and search for the next one.
-       - Finally, review the summary of access permissions and ensure **Read** access is provided for each of the necessary objects.
+    1. Your Traction Rec support team should be able to deploy the `Traction Rec Activity Finder Permission Set` from their `dev1` instance. If this Permission Set is deployed, proceed straight to the **User** creation step. To create a **Permission Set** from scratch:
+        - **Setup** > **Users** > **Permission Sets** > **New**
+        - Fill in the **Label** as you wish, and leave **License** as `--None--`
+        - In the new **Permission Set**, open **Object Settings**.
+        - In the very long list of **Object Settings**, do the following for each of the 10 [Objects listed below](#salesforce-permissions):
+            - Find the object and click to open it. In the configuration screen for each Object:
+                - Under **Object Permissions**, mark **Read** as **Enabled**.
+                - Under **Field Permissions**, mark **Read Access** on the header field to provide access to all fields.
+            - Save the **Object Settings** and search for the next one.
+        - Finally, review the summary of access permissions and ensure **Read** access is provided for each of the necessary objects.
     2. Create a **Profile**:
-       - You **must** do this **before** creating a user.
-       - **Setup** > **Users** > **Profiles** > **New**
-       - When asked what **Existing Profile** to clone from, select **Standard User** or **Standard Platform User**. Be sure to note the **User License** connected to the target profile.
-       - In the _very large_ configuration screen, click **Edit**, then:
-         - Under **Connected App Access**, add access to the Connected App you created above.
-         - Search for and enable the [System permissions listed below](#salesforce-permissions).
-         - Under **Custom Object Permissions**, add **Read** access to the [Objects listed below](#salesforce-permissions).
+        - You **must** do this **before** creating a user.
+        - **Setup** > **Users** > **Profiles** > **New**
+        - When asked what **Existing Profile** to clone from, select **Standard User** or **Standard Platform User**. Be sure to note the **User License** connected to the target profile.
+        - In the _very large_ configuration screen, click **Edit**, then:
+            - Under **Connected App Access**, add access to the Connected App you created above.
+            - Search for and enable the [System permissions listed below](#salesforce-permissions).
+            - Under **Custom Object Permissions**, add **Read** access to the [Objects listed below](#salesforce-permissions).
         - Save those changes.
 5. Create a new **User** with the new Profile or Permission Set:
-   - **Setup** > **Users** > **New User**
-     - **User License** - The option under which you created the Profile in the previous step, or **Salesforce**.
-     - **Email** - A working email that you will use to receive login verifications.
-     - **Username** - This is _not_ your email and _must_ be unique across _all Salesforce Organizations_. **This is the name that will be used in the Drupal connection below.** If you enter a preexisting username, you will receive this error:
+    - **Setup** > **Users** > **New User**
+        - **User License** - The option under which you created the Profile in the previous step, or **Salesforce**.
+        - **Email** - A working email that you will use to receive login verifications.
+        - **Username** - This is _not_ your email and _must_ be unique across _all Salesforce Organizations_. **This is the name that will be used in the Drupal connection below.** If you enter a preexisting username, you will receive this error:
           > Error: Duplicate Username.
           > The username already exists in this or another Salesforce organization. Usernames must be unique across all Salesforce organizations. To resolve, use a different username (it doesn't need to match the user's email address).
-     - Assign the User to the **Profile** you created above, or a **Permission Set** that has the [necessary permissions](#salesforce-permissions).
-       - Under **Permission Set Assignments**, click **Edit Assignments**
-       - Find the **Permission Set** you created in the prior step, select it, click **Add**, then **Save**.
+        - Assign the User to the **Profile** you created above, or a **Permission Set** that has the [necessary permissions](#salesforce-permissions).
+            - Under **Permission Set Assignments**, click **Edit Assignments**
+            - Find the **Permission Set** you created in the prior step, select it, click **Add**, then **Save**.
 6. Confirm your **Connected App**, **Profile**, and **User** are connected:
     - Go to **Setup** > **Apps** > **Connected Apps** > **Manage Connected Apps** and choose your new app. Assign the **Profile** or **Permission Set** that contains your new user if it does not already show under the relevant section.
-      - Click **Manage Profiles** or **Manage Permission Sets**
-      - Search for your Profile or Permission Set and Save.
+        - Click **Manage Profiles** or **Manage Permission Sets**
+        - Search for your Profile or Permission Set and Save.
     - In the Connect App Detail, click **Edit Policies**:
-      - Under **OAuth Policies** > **Permitted Users** choose **Admin approved users are pre-authorized**.
-      - Check **Issue JSON Web Token (JWT)-based access tokens**.
-      - **Save** the Connected App details.
+        - Under **OAuth Policies** > **Permitted Users** choose **Admin approved users are pre-authorized**.
+        - Check **Issue JSON Web Token (JWT)-based access tokens**.
+        - **Save** the Connected App details.
 
-> When the process is complete, you should have the following relationships between the **User**, **Permission Set** OR **Profile**, and **Connected App**:
-> - the API **User** should be assigned the **Permission Set** OR **Profile**.
-> - the **Connected App** should be assigned the same **Permission Set** OR **Profile**.
+----
+
+When the process is complete, you should have the following relationships between the **User**, **Permission Set** OR **Profile**, and **Connected App**:
+- the API **User** should be assigned the **Permission Set** OR **Profile**.
+- the **Connected App** should be assigned the same **Permission Set** OR **Profile**.
 
 Review all of these steps carefully. Missing any of them can result in an inability to query the API.
 
@@ -176,7 +176,7 @@ The fetcher outputs these files:
 Those files are then imported into Drupal content via [importers](https://github.com/YCloudYUSA/openy_traction_rec/tree/main/modules/openy_traction_rec_import/config/install) (in config items that start with `migrate_plus.`). The import goes as follows:
 
 > - Drupal Content Type (bundle)
-    >    - `Salesforce/TractionRec source field` → `Drupal destination field`
+>    - `Salesforce/TractionRec source field` → `Drupal destination field`
 
 - **Program** - from `programs.json` / TREC Program Categories
     - Id → id
@@ -244,79 +244,79 @@ Field types are taken from Salesforce's **Setup** > **Object Manager** > **{Enti
 
 ```mermaid
 erDiagram
-  Program_Category__c {
-    id Id
-    text(80) Name
-  }
-  Program__c {
-    id Id
-    text(80) Name
-    checkbox Available__c
-    textArea(255) Description__c
-  }
-  Program_Category_Tag__c {
-    id Id
-    autoNumber Name
-    lookup(Program) Program__c
-    lookup(Program_Category) Program_Category_c
-  }
-  Course__c {
-    id Id
-    text(80) Name
-    checkbox Available__c
-    text(128) Code__c
-    longTextArea(640) Description__c
-    lookup(Program) Program__c
-    richTextArea Rich_Description__c
-  }
-  Course_Session__c {
-    id Id
-    text(80) Name
-    checkbox Available__C
-    text(128) Code__c
-    lookup(Course) Course__c
-    longTextArea(640) Description__c
-    number(18_0) Num_Option_Entitlements__c
-    lookup(ProductAndDiscount) Product__C
-    richTextArea Rich_Description__c
-    sum Total_Option_Capacity__c
-    formula(number) Total_Option_Capacity_Remaining__C
-    sum Total_Option_Registrants__c
-    count Total_Options_Available__c
-  }
-  Course_Option__c {
-    id Id
-    text(80) Name
-    number(3_1) Age_Max__c
-    number(3_1) Age_Min__c
-    checkbox Available__c
-    number(18_0) Capacity__c
-    picklist(multiSelect) Day_of_Week__c
-    date End_Date__c
-    text(8) End_Time__c
-    text(128) Instructor__c
-    lookup(ProductAndDiscount) Product__c
-    number(18_0) Registration_Total_c
-    longTextArea(3500) Setup_Notes__c
-    number(3_0) Setup_Time_Required___c
-    date Start_Date__c
-    text(8) Start_Time__c
-    longTextArea(3500) Tear_Down_Notes__c
-    number(3_0) Tear_Down_Time_Required__C
-  }
-  Course_Session_Option__c {
-    id Id
-    autoNumber Name
-    lookup(CourseOption) Course_Option__c
-    masterDetail(CourseSession) Course_Session__c
-    checkbox Option_Available__c
-    number(18_0) Option_Capacity__c
-    number(18_0) Option_Registration_Total__c
-  }
-  Program_Category__c ||--|{ Program_Category_Tag__c : ""
-  Program__c ||--|{ Program_Category_Tag__c : ""
-  Program__c ||--|{ Course__c : ""
-  Course__c ||--|{ Course_Session__c : ""
-  Course_Session__c ||--|{ Course_Session_Option__c : ""
-  Course_Option__c ||--|{ Course_Session_Option__c : ""
+    Program_Category__c {
+        id Id
+        text(80) Name
+    }
+    Program__c {
+        id Id
+        text(80) Name
+        checkbox Available__c
+        textArea(255) Description__c
+    }
+    Program_Category_Tag__c {
+        id Id
+        autoNumber Name
+        lookup(Program) Program__c
+        lookup(Program_Category) Program_Category_c
+    }
+    Course__c {
+        id Id
+        text(80) Name
+        checkbox Available__c
+        text(128) Code__c
+        longTextArea(640) Description__c
+        lookup(Program) Program__c
+        richTextArea Rich_Description__c
+    }
+    Course_Session__c {
+        id Id
+        text(80) Name
+        checkbox Available__C
+        text(128) Code__c
+        lookup(Course) Course__c
+        longTextArea(640) Description__c
+        number(18_0) Num_Option_Entitlements__c
+        lookup(ProductAndDiscount) Product__C
+        richTextArea Rich_Description__c
+        sum Total_Option_Capacity__c
+        formula(number) Total_Option_Capacity_Remaining__C
+        sum Total_Option_Registrants__c
+        count Total_Options_Available__c
+    }
+    Course_Option__c {
+        id Id
+        text(80) Name
+        number(3_1) Age_Max__c
+        number(3_1) Age_Min__c
+        checkbox Available__c
+        number(18_0) Capacity__c
+        picklist(multiSelect) Day_of_Week__c
+        date End_Date__c
+        text(8) End_Time__c
+        text(128) Instructor__c
+        lookup(ProductAndDiscount) Product__c
+        number(18_0) Registration_Total_c
+        longTextArea(3500) Setup_Notes__c
+        number(3_0) Setup_Time_Required___c
+        date Start_Date__c
+        text(8) Start_Time__c
+        longTextArea(3500) Tear_Down_Notes__c
+        number(3_0) Tear_Down_Time_Required__C
+    }
+    Course_Session_Option__c {
+        id Id
+        autoNumber Name
+        lookup(CourseOption) Course_Option__c
+        masterDetail(CourseSession) Course_Session__c
+        checkbox Option_Available__c
+        number(18_0) Option_Capacity__c
+        number(18_0) Option_Registration_Total__c
+    }
+    Program_Category__c ||--|{ Program_Category_Tag__c : ""
+    Program__c ||--|{ Program_Category_Tag__c : ""
+    Program__c ||--|{ Course__c : ""
+    Course__c ||--|{ Course_Session__c : ""
+    Course_Session__c ||--|{ Course_Session_Option__c : ""
+    Course_Option__c ||--|{ Course_Session_Option__c : ""
 ```

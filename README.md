@@ -97,9 +97,11 @@ See [modules/openy_traction_rec_import/README.md](modules/openy_traction_rec_imp
         - Check **Issue JSON Web Token (JWT)-based access tokens**.
         - **Save** the Connected App details.
 
-> When the process is complete, you should have the following relationships between the **User**, **Permission Set** OR **Profile**, and **Connected App**:
-> - the API **User** should be assigned the **Permission Set** OR **Profile**.
-> - the **Connected App** should be assigned the same **Permission Set** OR **Profile**.
+----
+
+When the process is complete, you should have the following relationships between the **User**, **Permission Set** OR **Profile**, and **Connected App**:
+- the API **User** should be assigned the **Permission Set** OR **Profile**.
+- the **Connected App** should be assigned the same **Permission Set** OR **Profile**.
 
 Review all of these steps carefully. Missing any of them can result in an inability to query the API.
 

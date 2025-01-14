@@ -320,3 +320,9 @@ erDiagram
     Course_Session__c ||--|{ Course_Session_Option__c : ""
     Course_Option__c ||--|{ Course_Session_Option__c : ""
 ```
+
+## Using Google Tag Manager (GTM)
+
+By [integrating Google Tag Manager (GTM) with your Salesforce Community](https://developer.salesforce.com/blogs/2019/04/google-tag-manager-for-community-cloud), you can enable your marketing team to manage the deployment of marketing tags and tracking pixels, without relying on a developer to modify any code.
+
+You may also want to [configure cross-domain tracking](https://ds-docs.y.org/docs/howto/track-users/#cross-domain-tracking) on your Drupal site.

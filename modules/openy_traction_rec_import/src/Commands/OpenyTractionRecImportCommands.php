@@ -102,6 +102,8 @@ class OpenyTractionRecImportCommands extends DrushCommands {
    *
    * @option sync Sync source and destination. Delete destination records that
    *   do not exist in the source.
+   * @option update  In addition to processing unprocessed items from the
+   *   source, update previously-imported items with the current data.
    *
    * @return bool
    *   Execution status.

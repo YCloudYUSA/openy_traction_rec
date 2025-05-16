@@ -12,6 +12,7 @@ use Drupal\migrate\MigrateMessage;
 use Drupal\migrate\Plugin\MigrationInterface;
 use Drupal\migrate\Plugin\MigrationPluginManager;
 use Drupal\migrate_tools\MigrateExecutable;
+use Drupal\migrate_tools\MigrateTools;
 
 /**
  * Wrapper for Traction Rec import operations.
@@ -164,6 +165,17 @@ class Importer implements TractionRecImporterInterface {
       $migrations = $this->getMigrations();
       foreach ($migrations as $migration_id => $migration) {
         if ($migration->getStatus() == MigrationInterface::STATUS_IDLE) {
+          // Process the --update option here until the
+          // https://www.drupal.org/project/migrate_tools/issues/3524984
+          // is resolved.
+          if ($options['update']) {
+            $source_id_values_list = MigrateTools::buildIdList($options);
+            $keys = array_keys($migration->getSourcePlugin()->getIds());
+            foreach ($source_id_values_list as $source_id_values) {
+              $migration->getIdMap()->setUpdate(array_combine($keys, $source_id_values));
+            }
+          }
+
           // Get an instance of MigrateExecutable.
           $migrate_executable = new MigrateExecutable($migration, new MigrateMessage(), $options);
 

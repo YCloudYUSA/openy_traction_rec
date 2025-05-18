@@ -164,6 +164,13 @@ class Importer implements TractionRecImporterInterface {
       $migrations = $this->getMigrations();
       foreach ($migrations as $migration_id => $migration) {
         if ($migration->getStatus() == MigrationInterface::STATUS_IDLE) {
+          // Process the --update option here until the
+          // https://www.drupal.org/project/migrate_tools/issues/3524984
+          // is resolved.
+          if ($options['update']) {
+            $migration->getIdMap()->prepareUpdate();
+          }
+
           // Get an instance of MigrateExecutable.
           $migrate_executable = new MigrateExecutable($migration, new MigrateMessage(), $options);
 

@@ -154,7 +154,20 @@ class TractionRec implements TractionRecInterface {
    */
   public function loadCourseOptions(): array {
     try {
-      $result = $this->tractionRecClient->executeQuery('SELECT
+      $where_conditions = [
+        'TREX1__Course_Option__r.TREX1__Available_Online__c = true',
+        'TREX1__Course_Session_Option__c.TREX1__Available_Online__c = true',
+        'TREX1__Course_Option__r.TREX1__Register_Online_From_Date__c <= TODAY',
+        'TREX1__Course_Option__r.TREX1__Register_Online_To_Date__c > YESTERDAY',
+        'TREX1__Course_Option__r.TREX1__End_Date__c >= TODAY',
+        'TREX1__Course_Option__r.TREX1__Start_Date__c != null',
+      ];
+
+      if ($this->tractionRecSettings->get('require_day_of_week')) {
+        $where_conditions[] = 'TREX1__Course_Option__r.TREX1__Day_of_Week__c != null';
+      }
+
+      $query = 'SELECT
         TREX1__Course_Option__r.id,
         TREX1__Course_Option__r.name,
         TREX1__Course_Option__r.TREX1__Available_Online__c,
@@ -193,14 +206,9 @@ class TractionRec implements TractionRecInterface {
         TREX1__Course_Option__r.TREX1__Unlimited_Waitlist_Capacity__c,
         TREX1__Course_Option__r.TREX1__Waitlist_Total__c
       FROM TREX1__Course_Session_Option__c
-      WHERE TREX1__Course_Option__r.TREX1__Available_Online__c = true
-        AND TREX1__Course_Session_Option__c.TREX1__Available_Online__c = true
-        AND TREX1__Course_Option__r.TREX1__Day_of_Week__c  != null
-        AND TREX1__Course_Option__r.TREX1__Register_Online_From_Date__c <= TODAY
-        AND TREX1__Course_Option__r.TREX1__Register_Online_To_Date__c > YESTERDAY
-        AND TREX1__Course_Option__r.TREX1__End_Date__c >= TODAY
-        AND TREX1__Course_Option__r.TREX1__Start_Date__c != null');
+      WHERE ' . implode(' AND ', $where_conditions);
 
+      $result = $this->tractionRecClient->executeQuery($query);
       return $this->simplify($result);
     }
     catch (\Exception | GuzzleException $e) {
@@ -267,19 +275,27 @@ class TractionRec implements TractionRecInterface {
    */
   public function loadTotalAvailable(): array {
     try {
-      $result = $this->tractionRecClient->executeQuery('SELECT
+      $where_conditions = [
+        'TREX1__Course_Option__r.TREX1__Available_Online__c = true',
+        'TREX1__Course_Option__r.TREX1__Register_Online_To_Date__c > YESTERDAY',
+        'TREX1__Course_Option__r.TREX1__End_Date__c >= TODAY',
+        'TREX1__Course_Option__r.TREX1__Start_Date__c != null',
+      ];
+
+      if ($this->tractionRecSettings->get('require_day_of_week')) {
+        $where_conditions[] = 'TREX1__Course_Option__r.TREX1__Day_of_Week__c != null';
+      }
+
+      $query = 'SELECT
         TREX1__Course_Option__r.id,
         TREX1__Course_Option__r.TREX1__Total_Capacity_Available__c,
         TREX1__Course_Option__r.TREX1__Unlimited_Waitlist_Capacity__c,
         TREX1__Course_Option__r.TREX1__Waitlist_Total__c,
         TREX1__Course_Option__r.TREX1__Unlimited_Capacity__c
       FROM TREX1__Course_Session_Option__c
-      WHERE TREX1__Course_Option__r.TREX1__Available_Online__c = true
-        AND TREX1__Course_Option__r.TREX1__Day_of_Week__c  != null
-        AND TREX1__Course_Option__r.TREX1__Register_Online_To_Date__c > YESTERDAY
-        AND TREX1__Course_Option__r.TREX1__End_Date__c >= TODAY
-        AND TREX1__Course_Option__r.TREX1__Start_Date__c != null');
+      WHERE ' . implode(' AND ', $where_conditions);
 
+      $result = $this->tractionRecClient->executeQuery($query);
       return $this->simplify($result);
     }
     catch (\Exception | GuzzleException $e) {

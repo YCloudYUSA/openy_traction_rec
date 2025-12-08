@@ -68,6 +68,7 @@ class SessionTime extends ProcessPluginBase implements ContainerFactoryPluginInt
 
   /**
    * {@inheritdoc}
+   * @throws MigrateSkipRowException
    */
   public function transform(
     $value,
@@ -77,8 +78,17 @@ class SessionTime extends ProcessPluginBase implements ContainerFactoryPluginInt
   ) {
     $value = $row->getSource();
 
-    if (empty($value['start_date']) || empty($value['days'])) {
-      throw new MigrateSkipRowException('Datetime or day cannot be empty for session');
+    if (empty($value['start_date'])) {
+      throw new MigrateSkipRowException('Datetime cannot be empty for session.');
+    }
+
+    // Check if "Day of Week" is required and skip if not present.
+    $require_day_of_week = $this->configFactory
+      ->get('openy_traction_rec.settings')
+      ->get('require_day_of_week') ?? TRUE;
+
+    if ($require_day_of_week && empty($value['days'])) {
+      throw new MigrateSkipRowException('Day of Week is required but not provided for this session.');
     }
 
     // Default time.

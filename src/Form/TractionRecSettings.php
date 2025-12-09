@@ -96,12 +96,6 @@ class TractionRecSettings extends ConfigFormBase {
       '#required' => TRUE,
     ];
 
-    $form['require_day_of_week'] = [
-      '#type' => 'checkbox',
-      '#title' => $this->t('Require "Day of Week" field for course options'),
-      '#description' => $this->t('By default, limit course option import to those with a "Day of Week" value set. When unchecked, course options will be imported even if they have an empty "Day of Week" value.'),
-      '#default_value' => $config->get('require_day_of_week') ?? TRUE,
-    ];
 
     return parent::buildForm($form, $form_state);
   }
@@ -119,7 +113,6 @@ class TractionRecSettings extends ConfigFormBase {
     $config->set('services_base_url', $form_state->getValue('services_base_url'));
     $config->set('community_url', $form_state->getValue('community_url'));
     $config->set('api_base_url', $form_state->getValue('api_base_url'));
-    $config->set('require_day_of_week', $form_state->getValue('require_day_of_week'));
     $config->save();
 
     parent::submitForm($form, $form_state);

@@ -26,6 +26,13 @@ class TractionRec implements TractionRecInterface {
   protected $tractionRecSettings;
 
   /**
+   * The Traction Rec Import settings.
+   *
+   * @var \Drupal\Core\Config\ImmutableConfig
+   */
+  protected $tractionRecImportSettings;
+
+  /**
    * Logger channel.
    *
    * @var \Drupal\Core\Logger\LoggerChannel
@@ -46,6 +53,7 @@ class TractionRec implements TractionRecInterface {
     $this->tractionRecClient = $traction_rec_client;
     $this->logger = $loggerChannel;
     $this->tractionRecSettings = $config_factory->get('openy_traction_rec.settings');
+    $this->tractionRecImportSettings = $config_factory->get('openy_traction_rec_import.settings');
   }
 
   /**
@@ -163,7 +171,7 @@ class TractionRec implements TractionRecInterface {
         'TREX1__Course_Option__r.TREX1__Start_Date__c != null',
       ];
 
-      if ($this->tractionRecSettings->get('require_day_of_week')) {
+      if ($this->tractionRecImportSettings->get('require_day_of_week')) {
         $where_conditions[] = 'TREX1__Course_Option__r.TREX1__Day_of_Week__c != null';
       }
 

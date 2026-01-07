@@ -84,7 +84,7 @@ class SessionTime extends ProcessPluginBase implements ContainerFactoryPluginInt
 
     // Check if "Day of Week" is required and skip if not present.
     $require_day_of_week = $this->configFactory
-      ->get('openy_traction_rec.settings')
+      ->get('openy_traction_rec_import.settings')
       ->get('require_day_of_week') ?? TRUE;
 
     if ($require_day_of_week && empty($value['days'])) {

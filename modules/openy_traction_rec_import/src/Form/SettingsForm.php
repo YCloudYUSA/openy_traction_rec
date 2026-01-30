@@ -88,6 +88,13 @@ class SettingsForm extends ConfigFormBase {
       '#placeholder' => 'a2QDp000000irzcMAA:1234:Downtown YMCA',
     ];
 
+    $form['require_day_of_week'] = [
+      '#type' => 'checkbox',
+      '#title' => $this->t('Require "Day of Week" field for course options'),
+      '#description' => $this->t('By default, limit course option import to those with a "Day of Week" value set. When unchecked, course options will be imported even if they have an empty "Day of Week" value.'),
+      '#default_value' => $config->get('require_day_of_week') ?? TRUE,
+    ];
+
     return parent::buildForm($form, $form_state);
   }
 
@@ -102,6 +109,7 @@ class SettingsForm extends ConfigFormBase {
     $config->set('backup_limit', $values['backup_limit']);
     $config->set('fetch_status', $values['fetch_status']);
     $config->set('locations', array_filter(preg_split('/\R/', $values['locations'])));
+    $config->set('require_day_of_week', $values['require_day_of_week']);
     $config->save();
 
     parent::submitForm($form, $form_state);
